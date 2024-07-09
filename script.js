@@ -38,14 +38,30 @@ function createLightbox() {
    // Design the Lightbox previous slide button
    lightBox.appendChild(lbPrev);
    lbPrev.id = "lbPrev";
+   lbPrev.innerHTML = "&#9664;";
+lbPrev.onclick = showPrev;
 
    // Design the Lightbox next slide button
    lightBox.appendChild(lbNext);
    lbNext.id = "lbNext";
+   lbNext.innerHTML = "&#9654;";
+   lbNext.onclick = showNext;
 
    // Design the Lightbox Play-Pause button
    lightBox.appendChild(lbPlay);
    lbPlay.id = "lbPlay";
+   lbPlay.innerHTML = "&#9199;";
+   let timeID;
+   lbPlay.onclick = function() {
+      if (timeID) {
+         //stop slideshow
+         window.clearInterval(timeID);
+         timeID = undefined;
+      } else {
+         showNext();
+         timeID = window.setInterval(showNext, 1500);
+      }
+   } // ended here on pg #182
 
    // Design the Lightbox Images Container
    lightBox.appendChild(lbImages);
@@ -56,11 +72,36 @@ function createLightbox() {
       let image = document.createElement("img");
       image.src = imgFiles[i];
       image.alt = imgCaptions[i];
+      image.onclick = createOverlay;
       lbImages.appendChild(image);
    }
 
+   // function to move through the image list 
+   function showNext() {
+      lbImages.appendChild(lbImages.firstElementChild);
+      (currentImg < imgCount) ? currentImg++ : currentImg = 1;
+      lbCounter.textContent = currentImg + " / " + imgCount;
+   }
 
+   //function to move backward through the image list
+function showPrev() {
+   lbImages.insertBefore(lbImages.lastElementChild, lbImages.firstElementChild);
+      (currentImg > 1) ? currentImg-- : currentImg = imgCount;
+      lbCounter.textContent = currentImg + " / " + imgCount;
 }
+
+function createOverlay() {
+   let overlay = document.createElement("div");
+   overlay.id = "lbOverlay";
+
+   // add the figure box to the overlay 
+   let figureBox = document.createElement("figure");
+   overlay.appendChild(figureBox);
+
+   document.body.appendChild(overlay);
+}
+
+} // ends createLightbox function
 
 window.addEventListener("load", setupGallery);
 
