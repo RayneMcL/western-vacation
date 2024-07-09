@@ -98,8 +98,27 @@ function createOverlay() {
    let figureBox = document.createElement("figure");
    overlay.appendChild(figureBox);
 
+   // add image to the figure box
+   let overlayImage = this.cloneNode("true");
+   figureBox.appendChild(overlayImage);
+
+   // add the caption to figure box
+   let overlayCaption = document.createElement("figcaption");
+   overlayCaption.textContent = this.alt;
+   figureBox.appendChild(overlayCaption);
+
+   // add a close button to overlay
+   let closeBox = document.createElement("div");
+   closeBox.id = "lbOverlayClose";
+   closeBox.innerHTML = "&times;";
+
+   closeBox.onclick = function() {
+      document.body.removeChild(overlay);
+   }
+   overlay.appendChild(closeBox);
+
    document.body.appendChild(overlay);
-}
+   }  
 
 } // ends createLightbox function
 
